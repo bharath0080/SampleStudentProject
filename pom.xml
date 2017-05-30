@@ -3,7 +3,7 @@
         <groupId>com.github.bharath008</groupId>
         <artifactId>StudentEnrollmentWithSpring</artifactId>
         <packaging>war</packaging>
-        <version>15.0</version>
+        <version>15.1-SNAPSHOT</version>
         <name>StudentEnrollmentWithSpringWebApp</name>
         <url>http://maven.apache.org</url>
         <parent>
@@ -16,7 +16,7 @@
                 <url>https://github.com/bharath0080/SampleStudentProject</url>
                 <connection>scm:git:https://github.com/bharath0080/SampleStudentProject.git</connection>
                 <developerConnection>scm:git:https://github.com/bharath0080/SampleStudentProject.git</developerConnection>
-                <tag>StudentEnrollmentWithSpring-15.0</tag>
+                <tag>HEAD</tag>
         </scm>
         <distributionManagement>
                 <repository>
