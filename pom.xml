@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
         <modelVersion>4.0.0</modelVersion>
         <groupId>com.github.bharath008</groupId>
         <artifactId>StudentEnrollmentWithSpring</artifactId>
         <packaging>war</packaging>
-        <version>15.0-SNAPSHOT</version>
+        <version>15.0</version>
         <name>StudentEnrollmentWithSpringWebApp</name>
         <url>http://maven.apache.org</url>
         <parent>
@@ -17,7 +16,7 @@
                 <url>https://github.com/bharath0080/SampleStudentProject</url>
                 <connection>scm:git:https://github.com/bharath0080/SampleStudentProject.git</connection>
                 <developerConnection>scm:git:https://github.com/bharath0080/SampleStudentProject.git</developerConnection>
-                <tag>HEAD</tag>
+                <tag>StudentEnrollmentWithSpring-15.0</tag>
         </scm>
         <distributionManagement>
                 <repository>
