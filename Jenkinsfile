@@ -1,10 +1,10 @@
 node {
    def mvnHome
    stage('gitCode') {
-      checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'GITHUB_REPO_URL']]]
+      checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: '']]]
       mvnHome = tool 'M3'
    }
-   stage('Buildformaster') {
+   stage('Buildfor') {
       // Run the maven build
       if (isUnix()) {
          sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
