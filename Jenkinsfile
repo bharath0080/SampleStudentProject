@@ -1,7 +1,7 @@
 node {
    def mvnHome
    stage('gitCode') {
-      checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'GITHUB_REPO_URL']]]
+      checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/bharath0080/SampleStudentProject.git']]]
       mvnHome = tool 'M3'
    }
    stage('Buildformaster') {
