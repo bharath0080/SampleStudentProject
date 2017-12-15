@@ -1,12 +1,12 @@
 env.dockerimagename="devopsbasservice/buildonframework:buildonJenkinsfile2.0"
 node {
-   stage('gitCode') {
+   stage('PROJECT_Checkout') {
       checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/GITHUB_BRANCH']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'GITHUB_REPO_URL']]]       
     }
-   stage ('Build_GITHUB_BRANCH') {
+   stage ('PROJECT_Build') {
     sh 'mvn clean package -DskipTests=True'
   } 
-   stage ('StudentProject_CodeAnalysis') {
+   stage ('PROJECT_CodeAnalysis') {
     sh 'mvn sonar:sonar -Dsonar.host.url=http://10.0.0.94:9000 -Dmaven.test.failure.ignore=true -DskipTests=true -Dsonar.sources=src/main/java'
   }
  //Test Buildon  Test github
