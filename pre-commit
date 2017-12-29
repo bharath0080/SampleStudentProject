@@ -1,0 +1,86 @@
+#!/usr/bin/python
+import re
+import os
+import subprocess
+import requests
+import sys
+import json
+import time
+from sys import exit
+from io import BytesIO
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+
+def triggerstackstorm():
+        fetchgiturl=subprocess.check_output(["git", "remote", "show", "origin"])
+        for item in fetchgiturl.split("\n"):
+            if "Fetch" in item:
+                splititem = item.strip()
+                url=splititem.split(":")[-1]
+                githuburl= "https:"+url
+                user=url.split("/")[-2]
+        branchcommitID=subprocess.check_output(["git", "rev-parse", "HEAD"],stderr=subprocess.PIPE)
+        branchcommitID=branchcommitID.decode("utf-8")
+        branchcommitID=branchcommitID.replace('\n', '')
+        buildonid=subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],stderr=subprocess.PIPE)		
+        gitshowoutput=subprocess.check_output(["git", "show", branchcommitID])
+        for output in gitshowoutput.split("\n"):
+            if "Author" in output:
+                authorname=output.strip()
+                finalauthor=authorname[authorname.find("<")+1:authorname.find(">")]
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        headers = {'St2-Api-Key': 'MzY4NzgzNzUwMGEwNzczYTZkMjMyNGE2MDdmZjQ5ZTIzZTMzZTg0NmEyZGUxOGE5NGU2MjM5ZWM5YTI2YzEwOA', 'Content-Type' : 'application/json'}
+        data= {"github_branch": branchname, "github_repo_url": githuburl, "repo_user": user, "github_commit_id": branchcommitID, "user_mail_id": finalauthor}
+        response = requests.post('https://54.84.2.142/api/v1/webhooks/buildon', json=data, headers=headers, verify=False)
+        getbuildonstatus(buildonid)
+
+
+def getbuildonstatus(buildonid):
+        statusflag = 'NONE'
+        while statusflag != 'SUCCESS' or statusflag != 'FAILURE':
+            print 'Checking buildon '+buildonid+' status'
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+            data= {"commitid": buildonid}
+            headers={'Content-Type' : 'application/json'}
+            buildon_status = requests.post('http://34.228.51.230:5000/status',json=data, headers=headers, verify=False )
+            json_output=buildon_status.content
+            buidon_status = json.loads(json_output)
+            statusflag = format(buidon_status['status'])
+            print 'Buildon '+buildonid+' status : '+statusflag
+            if statusflag == 'SUCCESS' or statusflag == 'FAILURE':
+                break
+            time.sleep(15)
+
+currentbranch=subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"],stderr=subprocess.PIPE)
+currentbranch=currentbranch.decode("utf-8")
+currentbranch=currentbranch.replace('\n', '')
+commitID=subprocess.check_output(["git", "rev-parse", "HEAD"],stderr=subprocess.PIPE)
+commitID=commitID.decode("utf-8")
+commitID=commitID.replace('\n', '')
+branch=subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],stderr=subprocess.PIPE)
+branch=branch.decode("utf-8")
+branch=branch.replace('\n', '')
+branchname="buildOn_" + branch
+branchname=branchname.replace('\n', '')
+osname=os.name
+if osname == "nt":
+    test=os.system("git stash&&git checkout -b "+branchname+" "+commitID+"&&git stash apply&&git add -A&&git commit -n -m message&&git push origin "+branchname)
+    if test != 0:
+        print("changes not commited")
+        os.system("git checkout "+currentbranch+"&&git checkout stash -- . && git stash drop")
+        sys.exit(1)
+    os.system("git checkout "+currentbranch+"&&git checkout stash -- . && git stash drop&&git commit -n -m message")
+
+elif osname == "posix":
+    test=os.system(" git stash&& git checkout -b "+branchname+" "+commitID+"&& git stash apply && git add -A&& git commit -n -m message&& git push origin "+branchname)
+    if test != 0:
+        print("changes not commited")
+        os.system(" git checkout "+currentbranch+"&&  git checkout stash -- . &&  git stash drop")
+        sys.exit(1)
+    triggerstackstorm()
+    os.system("git checkout "+currentbranch+"&&git checkout stash -- . && git stash drop&&git commit -n -m message")
+else:
+    print("Undefined OS")
+    sys.exit(1)
+
+
