@@ -35,8 +35,11 @@ def triggerstackstorm():
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         headers = {'St2-Api-Key': 'MzY4NzgzNzUwMGEwNzczYTZkMjMyNGE2MDdmZjQ5ZTIzZTMzZTg0NmEyZGUxOGE5NGU2MjM5ZWM5YTI2YzEwOA', 'Content-Type' : 'application/json'}
         data= {"github_branch": branchname, "github_repo_url": githuburl, "repo_user": user, "github_commit_id": branchcommitID, "user_mail_id": finalauthor}
-        proxies = {'http': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050', 'https': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050'}	
-        response = requests.post('https://54.84.2.142/api/v1/webhooks/buildon', json=data, proxies=proxies, headers=headers, verify=False)
+        proxies = {'http': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050', 'https': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050'}
+        if os.name == "nt":
+            response = requests.post('https://54.84.2.142/api/v1/webhooks/buildon', json=data, proxies=proxies, headers=headers, verify=False)
+        elif os.name == "posix":
+            response = requests.post('https://54.84.2.142/api/v1/webhooks/buildon', json=data, headers=headers, verify=False)	
         getbuildonstatus(buildonid)
 
 
@@ -48,7 +51,10 @@ def getbuildonstatus(buildonid):
             data= {"commitid": buildonid}
             proxies = {'http': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050', 'https': 'http://scloudsetadmin:C111111%23@proxy.cognizant.com:6050'}	    
             headers={'Content-Type' : 'application/json'}
-            buildon_status = requests.post('http://34.228.51.230:5000/status',json=data, proxies=proxies, headers=headers, verify=False )
+            if os.name == "nt":
+                buildon_status = requests.post('http://34.228.51.230:5000/status',json=data, proxies=proxies, headers=headers, verify=False )
+            elif os.name == "posix":
+                buildon_status = requests.post('http://34.228.51.230:5000/status',json=data, headers=headers, verify=False )
             json_output=buildon_status.content
             json_output=json_output.decode("utf-8")	    
             buidon_status = json.loads(json_output)
