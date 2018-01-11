@@ -1,9 +1,11 @@
-env.dockerimagename="devopsbasservice/buildonframework:buildonJenkinsfile2.0"
+env.dockerimagename="devopsbasservice/buildonframework:buildon-jenkinsfile"
 node {
-   stage('Checkout') {
-      checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/bharath0080/SampleStudentProject.git']]]       
-    }
    stage ('Build') {
+    checkout scm
+    sh 'mvn clean package -DskipTests=True'
+  } 
+ //Test Buildon  Test github
+  stage ('Build') {
     sh 'mvn clean package -DskipTests=True'
   } 
    stage ('CodeAnalysis') {
