@@ -6,7 +6,6 @@
         </parent>
         <modelVersion>4.0.0</modelVersion>
         <groupId>com.github.bharath008</groupId>
-        <packaging>war</packaging>
         <version>16.1-SNAPSHOT</version>
         <url>http://maven.apache.org</url>
         
